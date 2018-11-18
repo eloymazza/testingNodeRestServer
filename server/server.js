@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 require('./config/config');
 
 // parse application/x-www-form-urlencoded
@@ -9,24 +11,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/usuario', function (req,res) {
-    res.json('get');
-});
+app.use(require('./route/user'))
 
-app.post('/usuario', function (req,res) {
-    let body = req.body;
-    body.name === undefined ? res.status(400).json('Name is required') : res.json({body});
-
-});
-
-app.put('/usuario/:id', function (req,res) {
-    res.json({
-        id:req.params.id
-    });
-});
-
-app.delete('/usuario', function (req,res) {
-    res.json('delete usuario');
+mongoose.connect('mongodb://localhost:27017/cafe', { useNewUrlParser: true} , (err, succ)=> {
+    
+    if(err){
+        throw new Error("Cannot connect to Database " + err);
+    }
+    else{
+        console.log('DB connected');
+        
+    }
+    
 });
 
 app.listen(process.env.PORT, ()=> {
