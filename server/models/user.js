@@ -41,6 +41,7 @@ let userSchema = new Schema({
     }
 });
 
+
 userSchema.plugin(uniqueValidator, {
     message:'{PATH} debe ser unico'
 });
