@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.use(require('./route/user'));
 
-mongoose.connect('mongodb://localhost:27017/cafe', { useNewUrlParser: true} , (err, succ)=> {
+mongoose.connect(process.env.dbURL, { useNewUrlParser: true} , (err, succ)=> {
     
     if(err){
         throw new Error("Cannot connect to Database " + err);

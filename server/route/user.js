@@ -6,11 +6,16 @@ const _ = require('underscore');
 
 app.get('/usuario', function (req,res) {
     
-    let from = Number(req.query.from || 0);
-
-    let limit = Number(req.query.limit || 5);
+    let query = req.query;
+    let from = Number(query.from || 0);
+    let limit = Number(query.limit || 5);
+    let userFilter = {};
     
-    User.find({}, 'name email')
+    if(query.active != undefined){
+        userFilter = {state:req.query.active}
+    }
+    
+    User.find(userFilter, 'name email')
         .skip(from)
         .limit(limit)
         .exec((err, users) => {
@@ -38,6 +43,7 @@ app.get('/usuario', function (req,res) {
         })
 
 });
+
 
 app.post('/usuario', function (req,res) {
 
@@ -70,6 +76,7 @@ app.post('/usuario', function (req,res) {
     
 });
 
+// Edit user
 app.put('/usuario/:id', function (req,res) {
 
     let id = req.params.id;
@@ -84,15 +91,39 @@ app.put('/usuario/:id', function (req,res) {
             });
         }
 
-            res.json({
-                ok: true,
-                user : updatedUserDB
-            });
-
+        res.json({
+            ok: true,
+            user : updatedUserDB
+        });
     })
 
 });
 
+// Disable user
+app.put('/usuario/desactivar/:id', function (req,res){
+
+    let id = req.params.id;
+    let body = {state : false}
+
+    
+    User.findByIdAndUpdate(id, body, {new:true}, (err, disabledUser) => {
+        if(err){
+            return res.status(400).json({
+                ok:false,
+                error : err
+            }); 
+        }
+
+        res.json({
+            ok:true,
+            user: disabledUser
+        });
+    })
+
+})
+
+
+// Physical remove
 app.delete('/usuario/:id', function (req,res) {
     
     let id = req.params.id;
