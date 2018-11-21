@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+
 require('./config/config');
 
 // parse application/x-www-form-urlencoded
@@ -11,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(require('./route/user'));
+app.use(require('./route/index'))
 
 mongoose.connect(process.env.dbURL, { useNewUrlParser: true} , (err, succ)=> {
     

@@ -25,3 +25,15 @@ else{
 }
 
 process.env.dbURL = dbURL;
+
+// =====================
+// Token Expirance
+// =====================
+
+process.env.TOKEN_EXPIRANCE = 60 * 60 * 24 * 30;
+
+// =====================
+// Auth Seed
+// =====================
+
+process.env.TOKEN_SEED = process.env.TOKEN_SEED || 'seed-development'
