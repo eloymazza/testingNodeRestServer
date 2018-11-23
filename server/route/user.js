@@ -3,8 +3,9 @@ const app = express();
 const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { verifyToken, verifyAdminRole } = require('../middlewares/authentication')
 
-app.get('/usuario', function (req,res) {
+app.get('/usuario', [verifyToken,verifyAdminRole], (req,res) => {
     
     let query = req.query;
     let from = Number(query.from || 0);
@@ -45,14 +46,15 @@ app.get('/usuario', function (req,res) {
 });
 
 
-app.post('/usuario', function (req,res) {
+app.post('/usuario', [verifyToken, verifyAdminRole], function (req,res) {
 
     let body = req.body;
     let user = new User({
         name : body.name,
         email: body.email,
         password: bcrypt.hashSync(body.password,10),
-        role: body.role
+        role: body.role,
+        img: body.img
     });
     
     user.save((err, userDB) => {
@@ -77,10 +79,10 @@ app.post('/usuario', function (req,res) {
 });
 
 // Edit user
-app.put('/usuario/:id', function (req,res) {
+app.put('/usuario/:id', [verifyToken, verifyAdminRole],  function (req,res) {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['name','email','img','role','state']);
+    let body = _.pick(req.body, ['name','email','img','role','state','img']);
 
     User.findByIdAndUpdate(id, body, (err, updatedUserDB) => {
 
@@ -100,7 +102,7 @@ app.put('/usuario/:id', function (req,res) {
 });
 
 // Disable user
-app.put('/usuario/desactivar/:id', function (req,res){
+app.put('/usuario/desactivar/:id', [verifyToken, verifyAdminRole], function (req,res){
 
     let id = req.params.id;
     let body = {state : false}
@@ -124,7 +126,7 @@ app.put('/usuario/desactivar/:id', function (req,res){
 
 
 // Physical remove
-app.delete('/usuario/:id', function (req,res) {
+app.delete('/usuario/:id', [verifyToken, verifyAdminRole],  function (req,res) {
     
     let id = req.params.id;
 
@@ -148,7 +150,7 @@ app.delete('/usuario/:id', function (req,res) {
         res.json({
             ok:true,
             user: removedUserDB
-        })
+        });
     })
 
 });
