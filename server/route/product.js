@@ -66,6 +66,32 @@ app.get('/product/:id', verifyToken, (req,res) => {
     })
 });
 
+app.get('/product/search/:filter', verifyToken, (req,res) => {
+
+    let filter = req.params.filter;
+
+    let regex = new RegExp(filter,'i');
+
+    Product.find({name:regex})
+            .populate('category')
+            .exec((err, products) => {
+
+                if(err){
+                    return res.status(500).json({
+                        ok:false,
+                        err
+                    });
+                }
+
+                res.json({
+                    ok: true,
+                    products
+                })
+
+            })
+
+})
+
 // Create Product
 app.post('/product', verifyToken, (req,res) => {
 
