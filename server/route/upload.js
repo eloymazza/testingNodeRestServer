@@ -50,8 +50,8 @@ app.put('/upload/:type/:id', (req,res) => {
 
     // Change name
     let fileName = `${id}-${new Date().getMilliseconds()}.${fileExt}`
-
-    file.mv(`../uploads/${type}/${fileName}`, (err) => {
+ //   ../uploads/${type}/${fileName}`
+    file.mv(path.resolve(`../uploads/${type}/${fileName}`), (err) => {
         if (err)
           return res.status(500).json({
               ok: false,
