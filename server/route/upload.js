@@ -57,6 +57,9 @@ app.put('/upload/:type/:id', (req,res) => {
               ok: false,
               err: {
                   message: 'Move error ocurred',
+                  url1: path.resolve(__dirname,`uploads/${type}/${fileName}`),
+                  url2: `uploads/${type}/${fileName}`,
+                  url3: `../uploads/product`,
                   err
                 }
             });
