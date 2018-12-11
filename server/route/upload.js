@@ -51,7 +51,14 @@ app.put('/upload/:type/:id', (req,res) => {
     // Change name
     let fileName = `${id}-${new Date().getMilliseconds()}.${fileExt}`
 
-    file.mv(`../uploads/${type}/${fileName}`, (err) => {
+    let movePath;
+    if(process.env.NODE_ENV == 'dev'){
+        movePath = `../uploads/${type}/${fileName}`
+    }
+    else {
+        movePath = `uploads/${type}/${fileName}`
+    }
+    file.mv(movePath, (err) => {
         if (err)
           return res.status(500).json({
               ok: false,
