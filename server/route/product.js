@@ -104,7 +104,8 @@ app.post('/product', verifyToken, (req,res) => {
         description: body.description,
         available: body.available,
         category: body.categoryID,
-        user: user._id
+        user: user._id,
+        img: body.img
     });
 
     product.save((error, productSaved) => {
@@ -138,7 +139,8 @@ app.put('/product/:id', verifyToken, (req, res) => {
         description: body.description,
         available: body.available,
         category: body.categoryID,
-        user: user._id
+        user: user._id,
+        img: body.img
     }
 
     Product.findByIdAndUpdate(id, updateProduct, {new:true,runValidators:true}, (err, productUpdated) =>{

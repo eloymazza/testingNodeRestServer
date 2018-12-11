@@ -23,7 +23,6 @@ mongoose.connect(process.env.dbURL, { useNewUrlParser: true} , (err, succ)=> {
     }
     else{
         console.log('DB connected');
-        
     }
     
 });
